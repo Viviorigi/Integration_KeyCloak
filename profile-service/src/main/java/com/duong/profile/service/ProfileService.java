@@ -5,6 +5,8 @@ import com.duong.profile.dto.identity.TokenExchangeParam;
 import com.duong.profile.dto.identity.UserCreationParam;
 import com.duong.profile.dto.request.RegistrationRequest;
 import com.duong.profile.dto.response.ProfileResponse;
+import com.duong.profile.exception.AppException;
+import com.duong.profile.exception.ErrorCode;
 import com.duong.profile.exception.ErrorNormalizer;
 import com.duong.profile.mapper.ProfileMapper;
 import com.duong.profile.repository.IdentityClient;
@@ -17,6 +19,7 @@ import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,6 +45,15 @@ public class ProfileService {
     public List<ProfileResponse> getAllProfiles(){
         var profiles = profileRepository.findAll();
         return profiles.stream().map(profileMapper::toProfileResponse).toList();
+    }
+
+    public ProfileResponse getMyProfile(){
+        var authentication =SecurityContextHolder.getContext().getAuthentication();
+        String userId = authentication.getName();
+        var profile = profileRepository.findByUserId(userId).orElseThrow(()->
+            new AppException(ErrorCode.USER_NOT_EXISTED)
+        );
+        return profileMapper.toProfileResponse(profile);
     }
 
     public ProfileResponse register(RegistrationRequest request){

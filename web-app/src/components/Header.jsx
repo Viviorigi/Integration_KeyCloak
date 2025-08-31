@@ -77,10 +77,9 @@ export default function Header() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  const handleLogout = (event) => {
+  const handleLogout = () => {
     handleMenuClose();
-    logOut();
-    window.location.href = "/login";
+    logOut(); 
   };
 
   const menuId = "primary-search-account-menu";

@@ -4,4 +4,11 @@ export const CONFIG = {
 
 export const API = {
   REGISTRATION: "/register",
+  MY_PROFILE: "/my-profile",
+};
+
+export const KEYCLOACK_CONFIG = {
+  url: "http://localhost:8180",
+  realm: "vivior",
+  clientId: "vivi_webapp",
 };
